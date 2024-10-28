@@ -6,13 +6,22 @@ export type BusinessCardDocument = HydratedDocument<BusinessCard>;
 @Schema()
 export class BusinessCard {
   @Prop()
-  name: string;
+  firstname: string;
 
   @Prop()
-  age: number;
+  lastname: string;
 
   @Prop()
-  breed: string;
+  title: string;
+
+  @Prop()
+  email: string;
+
+  @Prop()
+  about: string;
+
+  @Prop()
+  interests: string;
 }
 
 export const BusinessCardSchema = SchemaFactory.createForClass(BusinessCard);
