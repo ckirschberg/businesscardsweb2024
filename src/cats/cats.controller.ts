@@ -1,6 +1,7 @@
-import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post, UseGuards } from '@nestjs/common';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { CatsService } from './cats.service';
+import { TestGuard } from '../auth/test.guard';
 
 @Controller('cats')
 export class CatsController {
@@ -14,6 +15,7 @@ export class CatsController {
     }
     
     @Post()
+    @UseGuards(TestGuard)
     async create(@Body() createCatDto: CreateCatDto) {        
       return await this.catsService.create(createCatDto);
     }
