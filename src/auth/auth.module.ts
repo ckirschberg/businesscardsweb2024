@@ -7,6 +7,7 @@ import { AuthController } from './auth.controller';
 
 // to use process.env
 import { ConfigModule } from '@nestjs/config';
+import { jwtConstants } from './constants';
 ConfigModule.forRoot()
 
 
@@ -15,7 +16,7 @@ ConfigModule.forRoot()
     UsersModule,
     JwtModule.register({
       global: true,
-      secret: process.env.JWT_SECRET, //|| jwtConstants.secret,
+      secret: process.env.JWT_SECRET || jwtConstants.secret,
       signOptions: { expiresIn: '10h' },
     }),
   ],
