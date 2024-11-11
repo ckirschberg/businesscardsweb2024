@@ -6,6 +6,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { jwtConstants } from './constants';
 
+// to use process.env
+import { ConfigModule } from '@nestjs/config';
+ConfigModule.forRoot()
+
 @Module({
   imports: [
     UsersModule,
