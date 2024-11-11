@@ -56,8 +56,8 @@ describe('AuthController (e2e)', () => {
       });
       
       it("should not signup an invalid user with invalid username (not email)", async () => {
+        // Arrange
         const validUser: CreateUserDto = {username: 'test', password: 'password'};
-        const expectedObject = {username: 'test@test.dk', password: 'password'}
 
         // Act
         const  { body }  = await request(app.getHttpServer())
@@ -65,7 +65,7 @@ describe('AuthController (e2e)', () => {
           .send(validUser)
           .expect(400) // assert
 
-        // console.log(body);
+          // assert
         expect(body.message[0].message).toEqual("username must be an email")
       });
   });
