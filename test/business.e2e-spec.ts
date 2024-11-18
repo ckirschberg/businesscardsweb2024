@@ -70,7 +70,7 @@ describe('BusinessController (e2e)', () => {
   }
 
   describe('business controller', () => {
-    it('should add a valid business card to a business', async () => {
+    it('should add a valid business card to a business and retrieve the related data afterwards', async () => {
       // Create a business
       // Create a business-card
       // Add business-card to business
@@ -80,28 +80,22 @@ describe('BusinessController (e2e)', () => {
       const businessCardResponse: any = await businessCardService.create(
         {firstname: 'Test', lastname: 'Test', title: 'Test', email: 'test@test.dk', about: 'Test', interests: 'Test'} as CreateBusinessCardDto 
       )
-      
-      console.log("businessResponse", businessResponse);
-      
-      
-
-    //   businessCardResponse._id = businessCardResponse._id.toString();
-      console.log("businessCardResponse", businessCardResponse);
+      // console.log("businessCardResponse", businessCardResponse);
 
       // ACT
       const { body: result } = await request(app.getHttpServer())
       .post('/business/'+ businessResponse._id.toString() + '/business-cards')
       .send(businessCardResponse._doc)
 
-      console.log("result", result);
+      expect(result.businessCards[0]).toBeDefined();
       
-
-      const { body: result2 } = await request(app.getHttpServer())
+      const { body: findAll } = await request(app.getHttpServer())
       .get('/business')
-      // ASSERT
-    //   expect(result.businessCards).toContainEqual(businessCardResponse);
       
-      console.log("result2", result2[0]);
+      // ASSERT
+      expect(findAll[0].businessCards[0].firstname).toBe('Test');
+      
+      // console.log("result2", result2[0]);
       
     });
     });
