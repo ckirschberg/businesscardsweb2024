@@ -30,4 +30,8 @@ export class BusinessCardsService {
   remove(id: number) {
     return `This action removes a #${id} businessCard`;
   }
+  async deleteMany() {
+    return this.businessCardModel.deleteMany({}).exec();
+  }
+
 }
