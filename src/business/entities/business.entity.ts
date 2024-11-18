@@ -9,7 +9,7 @@ export class Business {
     @Prop()
     name: string;
 
-    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'BusinessCard' }], default: [] })
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: BusinessCard.name }], default: [] })
     businessCards: BusinessCard[];
 }
 
