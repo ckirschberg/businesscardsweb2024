@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { BusinessService } from './business.service';
 import { CreateBusinessDto } from './dto/create-business.dto';
 import { UpdateBusinessDto } from './dto/update-business.dto';
@@ -7,10 +7,20 @@ import { CreateBusinessCardDto } from '../business-cards/dto/create-business-car
 import { BusinessCard } from '../business-cards/entities/business-card.entity';
 import { ObjectId } from 'mongoose';
 import * as mongoose from "mongoose";
+import { SearchDTO } from './dto/search-business.dto';
 
 @Controller('business')
 export class BusinessController {
   constructor(private readonly businessService: BusinessService) {}
+
+
+  //@Query
+  //Get vs Post
+
+  @Get("search")
+  searchBusiness(@Query() search: SearchDTO) {
+    return this.businessService.searchBusiness(search);
+  }
 
   @Post(':id/business-cards')
   addBusinessCard(@Param('id') id: string,

@@ -98,5 +98,81 @@ describe('BusinessController (e2e)', () => {
       // console.log("result2", result2[0]);
       
     });
+    it("should find a business with a specific name", async () => {
+      // ARRANGE
+      const businessResponse = await businessService.create({name: 'Test Business'});
+      const businessResponse2 = await businessService.create({name: 'Dont find this'});
+      
+      // ACT
+      const { body: result } = await request(app.getHttpServer())
+                                .get('/business/search?name=' + businessResponse.name)
+
+      // console.log("result", result);
+      
+      // ASSERT
+      expect(result[0].name).toEqual('Test Business');
+      expect(result.length).toEqual(1);
     });
+
+    it("should find a business card with a specific email", async () => {
+      // ARRANGE
+      const businessResponse = await businessService.create({name: 'Test Business'});
+      const businessResponse2 = await businessService.create({name: 'Dont find this'});
+      const businessCardResponse: any = await businessCardService.create(
+        {firstname: 'Test', lastname: 'Test', title: 'Test', email: 'test@test.dk', about: 'Test', interests: 'Test'} as CreateBusinessCardDto 
+      )
+      const response = await businessService.addBusinessCard(businessResponse._id.toString(), businessCardResponse._doc)
+// console.log(response);
+// console.log("resultTest", resultTest[0].businessCards);
+      
+      // ACT
+      const { body: result } = await request(app.getHttpServer())
+                                .get('/business/search?bcEmail=' + businessCardResponse.email)
+
+      // console.log("result", result);
+      
+      // ASSERT
+      expect(result[0].businessCards[0].email).toEqual('test@test.dk');
+      expect(result[0].name).toEqual('Test Business');
+      expect(result.length).toEqual(1);
+    })
+    it("should find a business card with a partial firstname", async () => {
+      // ARRANGE
+      const businessResponse = await businessService.create({name: 'Test Business'});
+      const businessResponse2 = await businessService.create({name: 'Dont find this'});
+      const businessCardResponse: any = await businessCardService.create(
+        {firstname: 'Test', lastname: 'Test', title: 'Test', email: 'test@test.dk', about: 'Test', interests: 'Test'} as CreateBusinessCardDto 
+      )
+      const response = await businessService.addBusinessCard(businessResponse._id.toString(), businessCardResponse._doc)
+      const searchForFirstname = 'te'
+      
+      // ACT
+      const { body: result } = await request(app.getHttpServer())
+                                .get('/business/search?bcFirstname=' + searchForFirstname)
+
+      // console.log("result", result);
+      
+      // ASSERT
+      expect(result[0].businessCards[0].firstname).toEqual('Test');
+      expect(result[0].name).toEqual('Test Business');
+      expect(result.length).toEqual(1);
+    })
+    it("should get empty result when searching for something that is not there", async () => {
+      // ARRANGE
+      const businessResponse = await businessService.create({name: 'Test Business'});
+      const businessResponse2 = await businessService.create({name: 'Dont find this'});
+      const businessCardResponse: any = await businessCardService.create(
+        {firstname: 'Test', lastname: 'Test', title: 'Test', email: 'test@test.dk', about: 'Test', interests: 'Test'} as CreateBusinessCardDto 
+      )
+      const response = await businessService.addBusinessCard(businessResponse._id.toString(), businessCardResponse._doc)
+      const searchForFirstname = 'not there'
+      
+      // ACT
+      const { body: result } = await request(app.getHttpServer())
+                                .get('/business/search?bcFirstname=' + searchForFirstname)
+
+      // ASSERT
+      expect(result.length).toEqual(0);
+    })
+  });
 });
